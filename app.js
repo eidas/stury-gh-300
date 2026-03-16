@@ -158,6 +158,17 @@
       pool = shuffleArray(pool);
     }
 
+    // 選択肢もシャッフル（正解インデックスを追従させる）
+    pool = pool.map(q => {
+      const indices = q.options.map((_, i) => i);
+      const shuffled = shuffleArray(indices);
+      return {
+        ...q,
+        options: shuffled.map(i => q.options[i]),
+        correct: shuffled.indexOf(q.correct),
+      };
+    });
+
     // 問題数クリップ
     const count = clamp(state.questionCount, 1, pool.length);
     state.currentQuestions = pool.slice(0, count);
